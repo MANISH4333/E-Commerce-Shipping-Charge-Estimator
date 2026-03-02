@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="B2B E-Commerce Shipping Charge Estimator for Kirana Stores — Calculate shipping costs, find nearest warehouses, and estimate delivery charges.">
+    <title>JumboTails — Shipping Charge Estimator</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0A66C2',
+                            hover: '#004182',
+                            light: '#E8F1FA',
+                        },
+                        surface: '#FFFFFF',
+                        background: '#F3F6F8',
+                        border: '#E5E7EB',
+                        'text-primary': '#111827',
+                        'text-secondary': '#6B7280',
+                        success: '#057642',
+                        'success-light': '#ECFDF5',
+                        warning: '#B45309',
+                        'warning-light': '#FFFBEB',
+                        error: '#B91C1C',
+                        'error-light': '#FEF2F2',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'pill': '999px',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="font-inter bg-background text-text-primary min-h-screen flex flex-col">
+
+    <!-- ════════════════════════ NAVBAR ════════════════════════ -->
+    <nav class="bg-surface border-b border-border sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-text-primary leading-tight">JumboTails</h1>
+                        <p class="text-[11px] text-text-secondary leading-none -mt-0.5">Shipping Estimator</p>
+                    </div>
+                </div>
+                <!-- Nav links -->
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="#calculator" class="nav-link active">Calculator</a>
+                    <a href="#warehouse" class="nav-link">Warehouse</a>
+                    <a href="#shipping" class="nav-link">Shipping</a>
+                </div>
+                <!-- Status badge -->
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-success-light text-success text-xs font-medium">
+                        <span class="w-1.5 h-1.5 bg-success rounded-full animate-pulse"></span>
+                        API Online
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════ HERO ════════════════════════ -->
+    <header class="bg-gradient-to-br from-primary to-primary-hover py-14 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-pill text-white/90 text-xs font-medium mb-5">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                B2B E-Commerce Platform for Kirana Stores
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3 leading-tight">
+                Shipping Charge Estimator
+            </h2>
+            <p class="text-base text-white/75 max-w-2xl mx-auto leading-relaxed">
+                Calculate shipping costs instantly. Find the nearest warehouse, estimate delivery charges based on
+                distance, weight, transport mode, and delivery speed.
+            </p>
+        </div>
+    </header>
+
+    <!-- ════════════════════════ MAIN CONTENT ════════════════════════ -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- ──────────── COMBINED CALCULATOR (PRIMARY) ──────────── -->
+        <section id="calculator" class="mb-10">
+            <div class="section-header">
+                <div class="flex items-center gap-2.5">
+                    <div class="icon-box icon-box-primary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-text-primary">Combined Calculator</h3>
+                        <p class="text-sm text-text-secondary">Find nearest warehouse and calculate shipping — all in one step</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <form id="combinedForm" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <!-- Seller -->
+                        <div class="form-group">
+                            <label class="form-label" for="combined-seller">Seller</label>
+                            <select id="combined-seller" class="form-select" required>
+                                <option value="">Select seller</option>
+                                <option value="1">Nestle Seller</option>
+                                <option value="2">Rice Seller</option>
+                                <option value="3">Sugar Seller</option>
+                            </select>
+                        </div>
+                        <!-- Product -->
+                        <div class="form-group">
+                            <label class="form-label" for="combined-product">Product</label>
+                            <select id="combined-product" class="form-select" required>
+                                <option value="">Select product</option>
+                                <option value="1">Maggie 500g (0.5 kg)</option>
+                                <option value="2">Rice Bag 10Kg</option>
+                                <option value="3">Sugar Bag 25Kg</option>
+                            </select>
+                        </div>
+                        <!-- Customer -->
+                        <div class="form-group">
+                            <label class="form-label" for="combined-customer">Customer</label>
+                            <select id="combined-customer" class="form-select" required>
+                                <option value="">Select customer</option>
+                                <option value="1">Shree Kirana Store</option>
+                                <option value="2">Andheri Mini Mart</option>
+                                <option value="3">Rajesh General Store</option>
+                            </select>
+                        </div>
+                        <!-- Delivery Speed -->
+                        <div class="form-group">
+                            <label class="form-label" for="combined-speed">Delivery Speed</label>
+                            <select id="combined-speed" class="form-select" required>
+                                <option value="standard">Standard</option>
+                                <option value="express">Express</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button type="submit" class="btn-primary" id="combinedBtn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            Calculate Shipping
+                        </button>
+                        <span id="combinedLoader" class="loader hidden"></span>
+                    </div>
+                </form>
+
+                <!-- Combined Result -->
+                <div id="combinedResult" class="result-panel hidden mt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Shipping Charge Card -->
+                        <div class="result-card result-card-highlight">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium text-text-secondary">Shipping Charge</span>
+                            </div>
+                            <p class="text-3xl font-bold text-primary" id="combinedCharge">—</p>
+                        </div>
+                        <!-- Warehouse Card -->
+                        <div class="result-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium text-text-secondary">Nearest Warehouse</span>
+                            </div>
+                            <p class="text-lg font-semibold text-text-primary" id="combinedWarehouseId">—</p>
+                            <p class="text-sm text-text-secondary mt-1" id="combinedWarehouseLoc">—</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error -->
+                <div id="combinedError" class="error-panel hidden mt-6"></div>
+            </div>
+        </section>
+
+        <!-- ──────────── TWO-COLUMN: WAREHOUSE & SHIPPING ──────────── -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- ── NEAREST WAREHOUSE ── -->
+            <section id="warehouse">
+                <div class="section-header">
+                    <div class="flex items-center gap-2.5">
+                        <div class="icon-box icon-box-success">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-text-primary">Nearest Warehouse</h3>
+                            <p class="text-sm text-text-secondary">Find closest warehouse to a seller</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form id="warehouseForm" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="form-group">
+                                <label class="form-label" for="wh-seller">Seller</label>
+                                <select id="wh-seller" class="form-select" required>
+                                    <option value="">Select seller</option>
+                                    <option value="1">Nestle Seller</option>
+                                    <option value="2">Rice Seller</option>
+                                    <option value="3">Sugar Seller</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="wh-product">Product</label>
+                                <select id="wh-product" class="form-select" required>
+                                    <option value="">Select product</option>
+                                    <option value="1">Maggie 500g (0.5 kg)</option>
+                                    <option value="2">Rice Bag 10Kg</option>
+                                    <option value="3">Sugar Bag 25Kg</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button type="submit" class="btn-primary" id="warehouseBtn">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                Find Warehouse
+                            </button>
+                            <span id="warehouseLoader" class="loader hidden"></span>
+                        </div>
+                    </form>
+
+                    <!-- Warehouse Result -->
+                    <div id="warehouseResult" class="result-panel hidden mt-6">
+                        <div class="result-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium text-text-secondary">Warehouse Found</span>
+                            </div>
+                            <p class="text-lg font-semibold text-text-primary">Warehouse ID: <span id="whResultId" class="text-primary">—</span></p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span class="info-badge" id="whResultLat">Lat: —</span>
+                                <span class="info-badge" id="whResultLng">Long: —</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="warehouseError" class="error-panel hidden mt-6"></div>
+                </div>
+            </section>
+
+            <!-- ── SHIPPING CHARGE ── -->
+            <section id="shipping">
+                <div class="section-header">
+                    <div class="flex items-center gap-2.5">
+                        <div class="icon-box icon-box-warning">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-1 2 1 2-1 2 1zM13 16l6 2V6a1 1 0 00-1-1h-2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-text-primary">Shipping Charge</h3>
+                            <p class="text-sm text-text-secondary">Calculate cost from warehouse to customer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form id="shippingForm" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="form-group">
+                                <label class="form-label" for="sh-warehouse">Warehouse</label>
+                                <select id="sh-warehouse" class="form-select" required>
+                                    <option value="">Select warehouse</option>
+                                    <option value="1">BLR_Warehouse</option>
+                                    <option value="2">MUMB_Warehouse</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="sh-customer">Customer</label>
+                                <select id="sh-customer" class="form-select" required>
+                                    <option value="">Select customer</option>
+                                    <option value="1">Shree Kirana Store</option>
+                                    <option value="2">Andheri Mini Mart</option>
+                                    <option value="3">Rajesh General Store</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="sh-product">Product</label>
+                                <select id="sh-product" class="form-select" required>
+                                    <option value="">Select product</option>
+                                    <option value="1">Maggie 500g (0.5 kg)</option>
+                                    <option value="2">Rice Bag 10Kg</option>
+                                    <option value="3">Sugar Bag 25Kg</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="sh-speed">Delivery Speed</label>
+                                <select id="sh-speed" class="form-select" required>
+                                    <option value="standard">Standard</option>
+                                    <option value="express">Express</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button type="submit" class="btn-primary" id="shippingBtn">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                Get Charge
+                            </button>
+                            <span id="shippingLoader" class="loader hidden"></span>
+                        </div>
+                    </form>
+
+                    <!-- Shipping Result -->
+                    <div id="shippingResult" class="result-panel hidden mt-6">
+                        <div class="result-card result-card-highlight">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium text-text-secondary">Shipping Charge</span>
+                            </div>
+                            <p class="text-3xl font-bold text-primary" id="shippingCharge">—</p>
+                        </div>
+                    </div>
+
+                    <div id="shippingError" class="error-panel hidden mt-6"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ──────────── INFO CARDS ──────────── -->
+        <section class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Transport Modes -->
+            <div class="card card-compact">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-base font-semibold text-text-primary">Transport Modes</h4>
+                </div>
+                <div class="space-y-2.5">
+                    <div class="info-row">
+                        <span class="info-label">Mini Van</span>
+                        <span class="info-value">0–100 km · ₹3/km/kg</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Truck</span>
+                        <span class="info-value">100–500 km · ₹2/km/kg</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Aeroplane</span>
+                        <span class="info-value">500+ km · ₹1/km/kg</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Delivery Speed -->
+            <div class="card card-compact">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-base font-semibold text-text-primary">Delivery Speed</h4>
+                </div>
+                <div class="space-y-2.5">
+                    <div class="info-row">
+                        <span class="info-label">Standard</span>
+                        <span class="info-value">₹10 + Shipping</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Express</span>
+                        <span class="info-value">₹10 + Shipping + ₹1.2/kg</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Distance -->
+            <div class="card card-compact">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-base font-semibold text-text-primary">Distance Formula</h4>
+                </div>
+                <div class="space-y-2.5">
+                    <div class="info-row">
+                        <span class="info-label">Method</span>
+                        <span class="info-value">Haversine Formula</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Accuracy</span>
+                        <span class="info-value">Great-circle distance</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ════════════════════════ FOOTER ════════════════════════ -->
+    <footer class="bg-surface border-t border-border py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-sm text-text-secondary">
+                    <div class="w-6 h-6 bg-primary rounded flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <span>JumboTails &copy; 2026 &mdash; B2B Shipping Estimator</span>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-text-secondary">
+                    <a href="/docs" target="_blank" class="hover:text-primary transition-colors">API Docs</a>
+                    <span class="text-border">|</span>
+                    <a href="/redoc" target="_blank" class="hover:text-primary transition-colors">ReDoc</a>
+                    <span class="text-border">|</span>
+                    <span class="text-xs">v1.0.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/static/app.js"></script>
+</body>
+</html>

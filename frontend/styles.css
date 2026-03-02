@@ -1,0 +1,314 @@
+/*
+ * JumboTails — Design System Stylesheet
+ *
+ * Color System:
+ *   Primary Blue   #0A66C2    →  buttons, links, active states
+ *   Hover Blue     #004182    →  hover states
+ *   Background     #F3F6F8    →  page background
+ *   Card Surface   #FFFFFF    →  cards, modals
+ *   Border         #E5E7EB    →  dividers, input borders
+ *   Primary Text   #111827    →  headlines
+ *   Secondary Text #6B7280    →  captions, placeholders
+ *   Success        #057642
+ *   Warning        #B45309
+ *   Error          #B91C1C
+ *
+ * Typography: Inter, all weights 400–700
+ */
+
+/* ──────────────────────────── BASE ──────────────────────────── */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ──────────────────────────── NAV LINKS ──────────────────────────── */
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #0A66C2;
+    background-color: #E8F1FA;
+}
+
+.nav-link.active {
+    color: #0A66C2;
+    background-color: #E8F1FA;
+    font-weight: 600;
+}
+
+/* ──────────────────────────── SECTION HEADERS ──────────────────────────── */
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icon-box-primary {
+    background-color: #E8F1FA;
+    color: #0A66C2;
+}
+
+.icon-box-success {
+    background-color: #ECFDF5;
+    color: #057642;
+}
+
+.icon-box-warning {
+    background-color: #FFFBEB;
+    color: #B45309;
+}
+
+/* ──────────────────────────── CARDS ──────────────────────────── */
+
+.card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.card-compact {
+    padding: 20px;
+}
+
+/* ──────────────────────────── FORM ELEMENTS ──────────────────────────── */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    line-height: 1.4;
+}
+
+.form-select {
+    width: 100%;
+    height: 42px;
+    padding: 0 36px 0 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #111827;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 5.646a.5.5 0 01.708 0L8 8.293l2.646-2.647a.5.5 0 01.708.708l-3 3a.5.5 0 01-.708 0l-3-3a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    line-height: 1.5;
+}
+
+.form-select:hover {
+    border-color: #0A66C2;
+}
+
+.form-select:focus {
+    border-color: #0A66C2;
+    box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.12);
+}
+
+/* ──────────────────────────── BUTTONS ──────────────────────────── */
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #0A66C2;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-primary:hover {
+    background-color: #004182;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ──────────────────────────── LOADER ──────────────────────────── */
+
+.loader {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid #E5E7EB;
+    border-top-color: #0A66C2;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ──────────────────────────── RESULT PANELS ──────────────────────────── */
+
+.result-panel {
+    animation: slideUp 0.35s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-card {
+    background: #F3F6F8;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.result-card-highlight {
+    background: linear-gradient(135deg, #E8F1FA 0%, #F3F6F8 100%);
+    border-color: #0A66C2;
+    border-width: 1.5px;
+}
+
+/* ──────────────────────────── INFO BADGES ──────────────────────────── */
+
+.info-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #0A66C2;
+    background-color: #E8F1FA;
+    border-radius: 999px;
+}
+
+/* ──────────────────────────── INFO ROWS (reference cards) ────────────── */
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    border: 1px solid #F3F4F6;
+}
+
+.info-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.info-value {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+/* ──────────────────────────── ERROR PANEL ──────────────────────────── */
+
+.error-panel {
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #B91C1C;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.35s ease-out;
+}
+
+.error-panel::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23B91C1C' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+/* ──────────────────────────── RESPONSIVE ──────────────────────────── */
+
+@media (max-width: 640px) {
+    .card {
+        padding: 18px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+}
